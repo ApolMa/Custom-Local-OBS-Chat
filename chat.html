@@ -13,17 +13,19 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
 }
 .username-container{
     display: inline-block;
+    font-weight: bold;
     position: relative;
     background-color: rgba(255,255,255,1);
     border: 2px solid rgba(255, 192, 203, 1);
     border-radius: 30px;
-    padding: 4px 8px 8px 8px;
+    padding: 8px 12px 8px 12px;
     margin-bottom: -8px;
     z-index: 2;
-    animation: wave 2s ease-in-out infinite;
+    animation: waverot 2s linear infinite;
 }
 .username{
     font-weight: bold;
+    color:white;
     animation: wave 1s ease-in-out infinite;
 }
 .message-container{
@@ -35,7 +37,7 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
     margin-left: 24px;
     margin-top: -5px;
     z-index: 1;
-    animation: wave 3s ease-in-out infinite;
+    animation: waverot 3s linear infinite;
 }
 .message{
     animation: wave 1s ease-in-out infinite;
@@ -56,6 +58,11 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
 @keyframes wave {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(2px); }
+}
+@keyframes waverot {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(2px) rotate(2deg); }
+    75% { transform: translateY(2px) rotate(-2deg); }
 }
 @keyframes appear {
     0% { transform: translateY(20px); opacity: 0%; }
@@ -158,7 +165,7 @@ function addMessage(user, color, text) {
     const line = document.createElement("div");
     line.className = "chat_line";
     line.style.borderColor = color;
-    line.innerHTML = `<span class="username-container"><span class="username" style="color:${color}">${wrapLetters(user)}</span></span><br> <span class="message-container"><span class="message">${parseMessage(text)}</span></span>`;
+    line.innerHTML = `<span class="username-container" style="background-color:${color}"><span class="username">${wrapLetters(user)}</span></span><br> <span class="message-container"><span class="message">${parseMessage(text)}</span></span>`;
     document.getElementById("chat").prepend(line);
 }
 </script>
