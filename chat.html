@@ -27,7 +27,7 @@ body {font-family: "Varela Round";}
     font-weight: bold;
     color:white;
     animation: wave 1s ease-in-out infinite;
-    text-shadow: -1px -1px 0 #00000075, 1px -1px 0 #00000075, -1px 1px 0 #00000075, 1px 1px 0  #00000075;
+    
 }
 .message-container{
     display: inline-block;
@@ -51,10 +51,11 @@ body {font-family: "Varela Round";}
 }
 #chat {
     display: flex;
+    float:left;
     flex-direction: column-reverse;
     position: fixed;
     bottom: 0;
-    width: 90%;
+    width: 30%;
     padding-right: 10px;
     overflow: hidden;
 }
@@ -168,7 +169,7 @@ function addMessage(user, color, text) {
     const line = document.createElement("div");
     line.className = "chat_line";
     line.style.borderColor = color;
-    line.innerHTML = `<span class="username-container" style="background-color:${color}"><span class="username">${wrapLetters(user)}</span></span><br> <span class="message-container"><span class="message">${parseMessage(text)}</span></span>`;
+    line.innerHTML = `<span class="username-container" style="background-color:${color}; border-color: ${color}"><span class="username">${wrapLetters(user)}</span></span><br> <span class="message-container" border-color: ${color};><span class="message">${parseMessage(text)}</span></span>`;
     document.getElementById("chat").prepend(line);
 }
 </script>
