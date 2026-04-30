@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="font/valera_round/stylesheet.css">
 <style>
-body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: "Varela Round";}
+body {font-family: "Varela Round";}
 .chat_line {
     margin-bottom: 5px;
     padding-left: 8px;
@@ -16,9 +16,9 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
     font-weight: bold;
     position: relative;
     background-color: rgba(255,255,255,1);
-    border: 2px solid rgba(255, 192, 203, 1);
+    border: 3px solid rgba(255, 192, 203, 1);
     border-radius: 30px;
-    padding: 8px 12px 8px 12px;
+    padding: 4px 12px 4px 12px;
     margin-bottom: -8px;
     z-index: 2;
     animation: waverot 2s linear infinite;
@@ -27,6 +27,7 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
     font-weight: bold;
     color:white;
     animation: wave 1s ease-in-out infinite;
+    text-shadow: -1px -1px 0 #00000075, 1px -1px 0 #00000075, -1px 1px 0 #00000075, 1px 1px 0  #00000075;
 }
 .message-container{
     display: inline-block;
@@ -53,7 +54,9 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
     flex-direction: column-reverse;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: 90%;
+    padding-right: 10px;
+    overflow: hidden;
 }
 @keyframes wave {
     0%, 100% { transform: translateY(0px); }
@@ -61,8 +64,8 @@ body { background-color: rgba(122, 92, 92, 0.5); overflow: hidden; font-family: 
 }
 @keyframes waverot {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    25% { transform: translateY(2px) rotate(2deg); }
-    75% { transform: translateY(2px) rotate(-2deg); }
+    25% { transform: translateY(2px) rotate(1deg); }
+    75% { transform: translateY(2px) rotate(-1deg); }
 }
 @keyframes appear {
     0% { transform: translateY(20px); opacity: 0%; }
