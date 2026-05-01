@@ -7,7 +7,7 @@ body {font-family: "Varela Round";}
 .chat_line {
     margin-bottom: 5px;
     padding-left: 8px;
-    font-size: 20px;
+    font-size: 22px;
     line-height: 1.5;
     animation: appear 1s ease-in-out;
 }
@@ -44,9 +44,9 @@ body {font-family: "Varela Round";}
     animation: wave 1s ease-in-out infinite;
 }
 .emote {
-    height: 1.5em;
+    height: 2em;
     vertical-align: middle;
-    animation: wave 2s ease-in-out infinite;
+    animation: wave 1s ease-in-out infinite;
     display: inline-block;
 }
 #chat {
@@ -65,8 +65,8 @@ body {font-family: "Varela Round";}
 }
 @keyframes waverot {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    25% { transform: translateY(2px) rotate(1deg); }
-    75% { transform: translateY(2px) rotate(-1deg); }
+    25% { transform: translateY(2px) rotate(0.5deg); }
+    75% { transform: translateY(2px) rotate(-0.5deg); }
 }
 @keyframes appear {
     0% { transform: translateY(20px); opacity: 0%; }
