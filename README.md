@@ -45,6 +45,7 @@ Set the browser source background to transparent.
 - `scale`: visual scale of the overlay
 - `disappearTimeMs`: auto-remove delay in milliseconds
   - `0` means messages stay until trimmed or moderated away
+- `fromTop`: `true` makes the overlay start at the top and grow downward; `false` keeps it anchored at the bottom
 
 The two overlay config files are separate on purpose, so your streamer-only source can use different limits or timing than the main chat source.
 
@@ -54,6 +55,8 @@ The two overlay config files are separate on purpose, so your streamer-only sour
 - Your own messages are recognized by matching the sender login to `config/shared.json -> channel`.
 - Your messages appear in both overlays.
 - The streamer-only overlay shows only your messages.
+- The streamer-only overlay hides the nickname bubble and renders only the message bubble.
+- Older streamer-only messages become more transparent as the overlay fills toward `maxMessages`.
 - If Twitch deletes one message, the overlay removes that exact message.
 - If Twitch times out or bans a user, the overlay removes all currently visible messages from that user.
 - If Twitch clears the chat room, the overlay clears visible messages.
@@ -81,7 +84,8 @@ Set `disappearTimeMs` in the overlay config you want to change:
   "maxMessages": 15,
   "transparency": 1,
   "scale": 1,
-  "disappearTimeMs": 12000
+  "disappearTimeMs": 12000,
+  "fromTop": false
 }
 ```
 

@@ -2,5 +2,6 @@
   "maxMessages": 3,
   "transparency": 0.8,
   "scale": 5,
-  "disappearTimeMs": 60000
+  "disappearTimeMs": 60000,
+  "fromTop": true
 }

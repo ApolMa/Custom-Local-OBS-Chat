@@ -5,7 +5,8 @@
         maxMessages: 15,
         transparency: 1,
         scale: 1,
-        disappearTimeMs: 0
+        disappearTimeMs: 0,
+        fromTop: false
     };
     const DEFAULT_ACCENT = "#ff8cc8";
     const TWITCH_WS_URL = "wss://irc-ws.chat.twitch.tv:443";
@@ -27,7 +28,8 @@
             maxMessages: Math.max(1, Math.floor(clampNumber(config.maxMessages, 1, 500, DEFAULT_OVERLAY_CONFIG.maxMessages))),
             transparency: clampNumber(config.transparency, 0, 1, DEFAULT_OVERLAY_CONFIG.transparency),
             scale: clampNumber(config.scale, 0.25, 4, DEFAULT_OVERLAY_CONFIG.scale),
-            disappearTimeMs: Math.max(0, Math.floor(clampNumber(config.disappearTimeMs, 0, 86400000, DEFAULT_OVERLAY_CONFIG.disappearTimeMs)))
+            disappearTimeMs: Math.max(0, Math.floor(clampNumber(config.disappearTimeMs, 0, 86400000, DEFAULT_OVERLAY_CONFIG.disappearTimeMs))),
+            fromTop: Boolean(config.fromTop)
         };
     }
 
@@ -331,6 +333,8 @@
 
     ChatOverlayApp.prototype.applyOverlayConfig = function () {
         this.root.style.setProperty("--overlay-scale", String(this.config.scale));
+        this.root.classList.toggle("overlay-root--top", this.config.fromTop);
+        this.chat.classList.toggle("chat-stack--top", this.config.fromTop);
     };
 
     ChatOverlayApp.prototype.isStreamerMessage = function (login) {
@@ -534,17 +538,26 @@
         const line = document.createElement("div");
         const accentColor = message.color || DEFAULT_ACCENT;
         const opacity = this.config.transparency;
+        const isStreamerOverlay = this.overlayType === "streamer";
 
         line.className = "chat_line";
         line.dataset.messageId = message.messageId;
-        line.innerHTML = [
-            `<span class="username-container" style="background-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)};border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
-            `<span class="username">${wrapAnimatedText(message.displayName)}</span>`,
-            "</span><br>",
-            `<span class="message-container" style="background-color:rgba(255,255,255,${opacity});border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
-            `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
-            "</span>"
-        ].join("");
+        if (isStreamerOverlay) {
+            line.innerHTML = [
+                `<span class="message-container message-container--solo" style="background-color:rgba(255,255,255,${opacity});border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
+                `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
+                "</span>"
+            ].join("");
+        } else {
+            line.innerHTML = [
+                `<span class="username-container" style="background-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)};border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
+                `<span class="username">${wrapAnimatedText(message.displayName)}</span>`,
+                "</span><br>",
+                `<span class="message-container" style="background-color:rgba(255,255,255,${opacity});border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
+                `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
+                "</span>"
+            ].join("");
+        }
 
         this.chat.prepend(line);
 
@@ -566,6 +579,7 @@
         addToIndex(this.messagesByUserId, message.userId, message.messageId);
         addToIndex(this.messagesByLogin, message.login, message.messageId);
         this.trimOverflow();
+        this.updateStreamerMessageOpacity();
     };
 
     ChatOverlayApp.prototype.trimOverflow = function () {
@@ -595,6 +609,7 @@
         this.messagesById.delete(messageId);
         removeFromIndex(this.messagesByUserId, record.userId, messageId);
         removeFromIndex(this.messagesByLogin, record.login, messageId);
+        this.updateStreamerMessageOpacity();
     };
 
     ChatOverlayApp.prototype.removeMessagesByUserId = function (userId) {
@@ -615,6 +630,21 @@
 
     ChatOverlayApp.prototype.clearAllMessages = function () {
         Array.from(this.messagesById.keys()).forEach((messageId) => this.removeMessageById(messageId));
+    };
+
+    ChatOverlayApp.prototype.updateStreamerMessageOpacity = function () {
+        if (this.overlayType !== "streamer") {
+            return;
+        }
+
+        const lines = Array.from(this.chat.children);
+        const maxRank = Math.max(this.config.maxMessages - 1, 1);
+
+        lines.forEach((line, index) => {
+            const fadeStrength = index / maxRank;
+            const opacity = 1 - (fadeStrength * 0.65);
+            line.style.opacity = String(Math.max(0.35, opacity));
+        });
     };
 
     ChatOverlayApp.prototype.start = async function () {

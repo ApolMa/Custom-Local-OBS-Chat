@@ -21,10 +21,20 @@ body {
     transform-origin: left bottom;
 }
 
+.overlay-root--top {
+    top: 0;
+    bottom: auto;
+    transform-origin: left top;
+}
+
 .chat-stack {
     display: flex;
     flex-direction: column-reverse;
     align-items: flex-start;
+}
+
+.chat-stack--top {
+    flex-direction: column;
 }
 
 .chat_line {
@@ -62,6 +72,11 @@ body {
     border: 3px solid rgba(255, 192, 203, 1);
     border-radius: 30px;
     animation: waverot 3s linear infinite;
+}
+
+.message-container--solo {
+    margin-left: 0;
+    margin-top: 0;
 }
 
 .message {
