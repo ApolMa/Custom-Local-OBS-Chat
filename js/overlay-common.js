@@ -136,13 +136,8 @@
             .join("");
     }
 
-    function wrapAnimatedText(text) {
-        return [...String(text || "")]
-            .map((char, index) => {
-                const renderedChar = char === " " ? "&nbsp;" : escapeHtml(char);
-                return `<span class="animated-char" style="animation-delay:${index * 0.05}s">${renderedChar}</span>`;
-            })
-            .join("");
+    function renderAnimatedToken(text, delaySeconds) {
+        return `<span class="animated-token" style="animation-delay:${delaySeconds}s">${encodeWhitespace(text)}</span>`;
     }
 
     function buildTwitchPositions(emotesTag) {
@@ -171,6 +166,8 @@
     }
 
     function renderTextSegment(text, emotes) {
+        let textTokenIndex = 0;
+
         return String(text || "")
             .split(/(\s+)/)
             .map((token) => {
@@ -183,7 +180,9 @@
                 if (emotes[token]) {
                     return `<img src="${emotes[token]}" class="emote" alt="${escapeHtml(token)}">`;
                 }
-                return wrapAnimatedText(token);
+                const html = renderAnimatedToken(token, textTokenIndex * 0.08);
+                textTokenIndex += 1;
+                return html;
             })
             .join("");
     }
@@ -333,6 +332,7 @@
 
     ChatOverlayApp.prototype.applyOverlayConfig = function () {
         this.root.style.setProperty("--overlay-scale", String(this.config.scale));
+        this.root.style.opacity = String(this.config.transparency);
         this.root.classList.toggle("overlay-root--top", this.config.fromTop);
         this.chat.classList.toggle("chat-stack--top", this.config.fromTop);
     };
@@ -537,23 +537,22 @@
 
         const line = document.createElement("div");
         const accentColor = message.color || DEFAULT_ACCENT;
-        const opacity = this.config.transparency;
         const isStreamerOverlay = this.overlayType === "streamer";
 
         line.className = "chat_line";
         line.dataset.messageId = message.messageId;
         if (isStreamerOverlay) {
             line.innerHTML = [
-                `<span class="message-container message-container--solo" style="background-color:rgba(255,255,255,${opacity});border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
+                `<span class="message-container message-container--solo" style="background-color:#ffffff;border-color:${accentColor || DEFAULT_ACCENT}">`,
                 `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
                 "</span>"
             ].join("");
         } else {
             line.innerHTML = [
-                `<span class="username-container" style="background-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)};border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
-                `<span class="username">${wrapAnimatedText(message.displayName)}</span>`,
+                `<span class="username-container" style="background-color:${accentColor || DEFAULT_ACCENT};border-color:${accentColor || DEFAULT_ACCENT}">`,
+                `<span class="username">${renderAnimatedToken(message.displayName, 0)}</span>`,
                 "</span><br>",
-                `<span class="message-container" style="background-color:rgba(255,255,255,${opacity});border-color:${colorWithAlpha(accentColor, opacity, DEFAULT_ACCENT)}">`,
+                `<span class="message-container" style="background-color:#ffffff;border-color:${accentColor || DEFAULT_ACCENT}">`,
                 `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
                 "</span>"
             ].join("");

@@ -1,7 +1,7 @@
 {
   "maxMessages": 15,
-  "transparency": 0.7,
+  "transparency": 1,
   "scale": 1,
-  "disappearTimeMs": 60000,
+  "disappearTimeMs": 300000,
   "fromTop": false
 }

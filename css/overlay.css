@@ -83,7 +83,7 @@ body {
     color: #111111;
 }
 
-.animated-char {
+.animated-token {
     display: inline-block;
     animation: wave 2s ease-in-out infinite;
 }
