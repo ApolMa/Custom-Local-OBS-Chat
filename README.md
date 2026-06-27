@@ -2,6 +2,8 @@
 
 This project is a static Twitch chat overlay for OBS. It is served locally and used as one or more OBS browser sources.
 
+[technical part was vibe coded, css visuals coded by me]
+
 ## Files You Actually Use
 
 - `chat.html`: main chat overlay
@@ -17,10 +19,10 @@ This project is a static Twitch chat overlay for OBS. It is served locally and u
 Run the project directory through Python's static server:
 
 ```bash
-python -m http.server 8080 --directory "/home/apolma/Projects/OBS/chat/Custom-Chat"
+python -m http.server 8080 --directory "path-to-the-chat-folder"
 ```
 
-If you already have shell helpers for starting and stopping that command, keep using them. The overlay changes in this repo do not require any server change.
+Or just use Apache server from XAMPP
 
 ## OBS Browser Source URLs
 
