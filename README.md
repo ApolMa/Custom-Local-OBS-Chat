@@ -1,8 +1,8 @@
 # Custom Chat Overlay
 
-This project is a static Twitch chat overlay for OBS. It is served locally and used as one or more OBS browser sources.
+This project is a static Twitch chat overlay for OBS I made for myself. It is served locally and used as one or more OBS browser sources.
 
-[ technical part was vibe coded, css visuals coded by me ]
+[ technical part and README were vibe coded, css visuals were coded by me ]
 
 ## Files You Actually Use
 
