@@ -1,6 +1,6 @@
 # Custom Chat Overlay <img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/56c2035265f738c36f165501860d150b26f494dc/G-STkbcXIAAUMpa.png" width="8%" height="8%">
 
-This project is a static Twitch chat overlay for OBS I made for myself cause had issues with 7tv on linux OBS ))
+This project is a static Twitch chat overlay for OBS I made for myself cause had issues with 7tv on linux OBS ))<br>
 It is served locally and used as one or more OBS browser sources.
 
 [ technical part and most of README were vibe coded, css visuals were coded by me ]
