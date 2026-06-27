@@ -1,8 +1,10 @@
 {
   "maxMessages": 3,
-  "transparency": 0.8,
+  "transparency": 0.7,
   "scale": 4,
-  "disappearTimeMs": 60000,
+  "disappearTimeMs": 120000,
   "fromTop": true,
-  "alignRight": true
+  "alignRight": true,
+  "fadeOldMessages": false,
+  "emojiOnlyScale": 1.5
 }

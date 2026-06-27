@@ -12,6 +12,7 @@ body {
 }
 
 .overlay-root {
+    box-sizing: border-box;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -118,6 +119,11 @@ body {
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
+}
+
+.chat_line--emoji-only .message {
+    font-size: calc(1em * var(--emoji-only-scale, 1));
+    line-height: 1.15;
 }
 
 .animated-token {

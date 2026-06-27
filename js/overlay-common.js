@@ -7,7 +7,9 @@
         scale: 1,
         disappearTimeMs: 0,
         fromTop: false,
-        alignRight: false
+        alignRight: false,
+        fadeOldMessages: true,
+        emojiOnlyScale: 1
     };
     const DEFAULT_ACCENT = "#ff8cc8";
     const TWITCH_WS_URL = "wss://irc-ws.chat.twitch.tv:443";
@@ -31,7 +33,9 @@
             scale: clampNumber(config.scale, 0.25, 4, DEFAULT_OVERLAY_CONFIG.scale),
             disappearTimeMs: Math.max(0, Math.floor(clampNumber(config.disappearTimeMs, 0, 86400000, DEFAULT_OVERLAY_CONFIG.disappearTimeMs))),
             fromTop: Boolean(config.fromTop),
-            alignRight: Boolean(config.alignRight)
+            alignRight: Boolean(config.alignRight),
+            fadeOldMessages: config.fadeOldMessages !== false,
+            emojiOnlyScale: clampNumber(config.emojiOnlyScale, 1, 8, DEFAULT_OVERLAY_CONFIG.emojiOnlyScale)
         };
     }
 
@@ -142,6 +146,17 @@
         return `<span class="animated-token" style="animation-delay:${delaySeconds}s">${encodeWhitespace(text)}</span>`;
     }
 
+    function isEmojiLikeToken(token) {
+        const compactToken = String(token || "").trim();
+        const emojiBase = compactToken.replace(/[\u200d\uFE0F\u{1F3FB}-\u{1F3FF}]/gu, "");
+
+        if (!emojiBase) {
+            return false;
+        }
+
+        return /^[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}]+$/u.test(emojiBase);
+    }
+
     function buildTwitchPositions(emotesTag) {
         const positions = {};
 
@@ -169,8 +184,10 @@
 
     function renderTextSegment(text, emotes) {
         let textTokenIndex = 0;
+        let hasEmote = false;
+        let hasPlainText = false;
 
-        return String(text || "")
+        const html = String(text || "")
             .split(/(\s+)/)
             .map((token) => {
                 if (!token) {
@@ -180,21 +197,35 @@
                     return encodeWhitespace(token);
                 }
                 if (emotes[token]) {
+                    hasEmote = true;
                     return `<img src="${emotes[token]}" class="emote" alt="${escapeHtml(token)}">`;
                 }
+                if (isEmojiLikeToken(token)) {
+                    hasEmote = true;
+                    return renderAnimatedToken(token, textTokenIndex * 0.08);
+                }
+                hasPlainText = true;
                 const html = renderAnimatedToken(token, textTokenIndex * 0.08);
                 textTokenIndex += 1;
                 return html;
             })
             .join("");
+
+        return {
+            hasEmote,
+            hasPlainText,
+            html
+        };
     }
 
-    function parseMessageHtml(text, emotesTag, emotes) {
+    function parseMessageContent(text, emotesTag, emotes) {
         const chars = [...String(text || "")];
         const twitchPositions = buildTwitchPositions(emotesTag);
         const segments = [];
         let textBuffer = "";
         let index = 0;
+        let hasEmote = false;
+        let hasPlainText = false;
 
         while (index < chars.length) {
             if (twitchPositions[index]) {
@@ -218,14 +249,23 @@
             segments.push({ type: "text", value: textBuffer });
         }
 
-        return segments
+        const html = segments
             .map((segment) => {
                 if (segment.type === "emote") {
+                    hasEmote = true;
                     return `<img src="${segment.url}" class="emote" alt="">`;
                 }
-                return renderTextSegment(segment.value, emotes);
+                const renderedSegment = renderTextSegment(segment.value, emotes);
+                hasEmote = hasEmote || renderedSegment.hasEmote;
+                hasPlainText = hasPlainText || renderedSegment.hasPlainText;
+                return renderedSegment.html;
             })
             .join("");
+
+        return {
+            emoteOnly: hasEmote && !hasPlainText,
+            html
+        };
     }
 
     function parseHexColor(color) {
@@ -330,13 +370,16 @@
         this.generatedMessageCount = 0;
         this.websocket = null;
         this.reconnectHandle = null;
+        this.handleResize = this.applyOverlayConfig.bind(this);
     }
 
     ChatOverlayApp.prototype.applyOverlayConfig = function () {
         const alignRight = this.overlayType === "streamer" && this.config.alignRight;
 
         this.root.style.setProperty("--overlay-scale", String(this.config.scale));
+        this.root.style.setProperty("--emoji-only-scale", String(this.config.emojiOnlyScale));
         this.root.style.opacity = String(this.config.transparency);
+        this.root.style.maxWidth = alignRight ? `${Math.floor(window.innerWidth / this.config.scale)}px` : "";
         this.root.classList.toggle("overlay-root--top", this.config.fromTop);
         this.root.classList.toggle("overlay-root--right", alignRight);
         this.chat.classList.toggle("chat-stack--top", this.config.fromTop);
@@ -544,13 +587,15 @@
         const line = document.createElement("div");
         const accentColor = message.color || DEFAULT_ACCENT;
         const isStreamerOverlay = this.overlayType === "streamer";
+        const parsedMessage = parseMessageContent(message.text, message.emotesTag, this.emotes);
 
         line.className = "chat_line";
         line.dataset.messageId = message.messageId;
+        line.classList.toggle("chat_line--emoji-only", isStreamerOverlay && parsedMessage.emoteOnly);
         if (isStreamerOverlay) {
             line.innerHTML = [
                 `<span class="message-container message-container--solo" style="background-color:#ffffff;border-color:${accentColor || DEFAULT_ACCENT}">`,
-                `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
+                `<span class="message">${parsedMessage.html}</span>`,
                 "</span>"
             ].join("");
         } else {
@@ -559,7 +604,7 @@
                 `<span class="username">${renderAnimatedToken(message.displayName, 0)}</span>`,
                 "</span><br>",
                 `<span class="message-container" style="background-color:#ffffff;border-color:${accentColor || DEFAULT_ACCENT}">`,
-                `<span class="message">${parseMessageHtml(message.text, message.emotesTag, this.emotes)}</span>`,
+                `<span class="message">${parsedMessage.html}</span>`,
                 "</span>"
             ].join("");
         }
@@ -643,6 +688,13 @@
         }
 
         const lines = Array.from(this.chat.children);
+        if (!this.config.fadeOldMessages) {
+            lines.forEach((line) => {
+                line.style.opacity = "1";
+            });
+            return;
+        }
+
         const maxRank = Math.max(this.config.maxMessages - 1, 1);
 
         lines.forEach((line, index) => {
@@ -654,6 +706,7 @@
 
     ChatOverlayApp.prototype.start = async function () {
         this.applyOverlayConfig();
+        window.addEventListener("resize", this.handleResize);
         await this.loadEmotes();
         this.connect();
     };

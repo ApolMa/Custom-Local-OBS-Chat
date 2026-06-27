@@ -47,6 +47,8 @@ Set the browser source background to transparent.
   - `0` means messages stay until trimmed or moderated away
 - `fromTop`: `true` makes the overlay start at the top and grow downward; `false` keeps it anchored at the bottom
 - `alignRight`: streamer overlay only; `true` anchors message bubbles to the right side instead of the left
+- `fadeOldMessages`: streamer overlay only; `false` disables the older-message transparency fade near `maxMessages`
+- `emojiOnlyScale`: streamer overlay only; scales messages that contain only emotes or emoji, without any other text
 
 The two overlay config files are separate on purpose, so your streamer-only source can use different limits or timing than the main chat source.
 
@@ -87,7 +89,9 @@ Set `disappearTimeMs` in the overlay config you want to change:
   "scale": 1,
   "disappearTimeMs": 12000,
   "fromTop": false,
-  "alignRight": false
+  "alignRight": false,
+  "fadeOldMessages": true,
+  "emojiOnlyScale": 1
 }
 ```
 
