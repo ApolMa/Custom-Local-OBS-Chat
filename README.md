@@ -1,4 +1,4 @@
-# Custom Chat Overlay
+# Custom Chat Overlay <img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/56c2035265f738c36f165501860d150b26f494dc/G-STkbcXIAAUMpa.png" widht=50px>
 
 This project is a static Twitch chat overlay for OBS I made for myself. It is served locally and used as one or more OBS browser sources.
 
