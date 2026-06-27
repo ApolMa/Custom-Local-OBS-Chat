@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'DOS2000 (RU/EN)';
+    src: url('DOS2000RUEN.eot');
+    src: url('DOS2000RUEN.eot?#iefix') format('embedded-opentype'),
+        url('DOS2000RUEN.woff2') format('woff2'),
+        url('DOS2000RUEN.woff') format('woff'),
+        url('DOS2000RUEN.ttf') format('truetype'),
+        url('DOS2000RUEN.svg#DOS2000RUEN') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
