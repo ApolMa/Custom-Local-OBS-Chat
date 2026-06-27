@@ -7,7 +7,7 @@ It is served locally and used as one or more OBS browser sources.
 
 ### Some example screenshots
 
-<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/image.png" width="50%" height="50%"> <img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="50%" height="50%">
+<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="50%" height="50%">
 
 ## Files You Actually Use
 
