@@ -2,7 +2,7 @@
 
 This project is a static Twitch chat overlay for OBS. It is served locally and used as one or more OBS browser sources.
 
-[technical part was vibe coded, css visuals coded by me]
+[ technical part was vibe coded, css visuals coded by me ]
 
 ## Files You Actually Use
 
