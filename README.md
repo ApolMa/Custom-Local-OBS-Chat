@@ -7,8 +7,7 @@ It is served locally and used as one or more OBS browser sources.
 
 ### Some example screenshots
 
-<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/image.png" width="40%" height="40%">
-<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="40%" height="40%">
+<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/image.png" width="50%" height="50%"> <img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="50%" height="50%">
 
 ## Files You Actually Use
 
@@ -50,12 +49,12 @@ Set the browser source background to transparent.
 
 - `maxMessages`: maximum number of visible messages in that overlay
 - `transparency`: bubble opacity from `0` to `1`
-- `scale`: visual scale of the overlay
+- `scale`: visual scale of the overlay, clamped to `0.25`..`4`
 - `disappearTimeMs`: auto-remove delay in milliseconds
   - `0` means messages stay until trimmed or moderated away
 - `fromTop`: `true` makes the overlay start at the top and grow downward; `false` keeps it anchored at the bottom
 - `alignRight`: streamer overlay only; `true` anchors message bubbles to the right side instead of the left
-- `fadeOldMessages`: streamer overlay only; `false` disables the older-message transparency fade near `maxMessages`
+- `fadeOldMessages`: streamer overlay only; `true` fades older visible messages, `false` keeps them fully opaque
 - `emojiOnlyScale`: streamer overlay only; scales messages that contain only emotes or emoji, without any other text
 
 The two overlay config files are separate on purpose, so your streamer-only source can use different limits or timing than the main chat source.
@@ -67,7 +66,8 @@ The two overlay config files are separate on purpose, so your streamer-only sour
 - Your messages appear in both overlays.
 - The streamer-only overlay shows only your messages.
 - The streamer-only overlay hides the nickname bubble and renders only the message bubble.
-- Older streamer-only messages become more transparent as the overlay fills toward `maxMessages`.
+- If `fadeOldMessages` is enabled, older streamer-only messages become more transparent as the overlay fills toward `maxMessages`.
+- The streamer-only overlay is also trimmed by available screen height after scale is applied, so it may show fewer than `maxMessages` if the messages are too large to fit.
 - If Twitch deletes one message, the overlay removes that exact message.
 - If Twitch times out or bans a user, the overlay removes all currently visible messages from that user.
 - If Twitch clears the chat room, the overlay clears visible messages.
