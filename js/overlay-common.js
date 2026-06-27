@@ -374,16 +374,20 @@
     }
 
     ChatOverlayApp.prototype.applyOverlayConfig = function () {
+        const isStreamerOverlay = this.overlayType === "streamer";
         const alignRight = this.overlayType === "streamer" && this.config.alignRight;
+        const scaledViewportHeight = Math.max(1, Math.floor(window.innerHeight / this.config.scale));
 
         this.root.style.setProperty("--overlay-scale", String(this.config.scale));
         this.root.style.setProperty("--emoji-only-scale", String(this.config.emojiOnlyScale));
         this.root.style.opacity = String(this.config.transparency);
+        this.root.style.maxHeight = isStreamerOverlay ? `${scaledViewportHeight}px` : "";
         this.root.style.maxWidth = alignRight ? `${Math.floor(window.innerWidth / this.config.scale)}px` : "";
         this.root.classList.toggle("overlay-root--top", this.config.fromTop);
         this.root.classList.toggle("overlay-root--right", alignRight);
         this.chat.classList.toggle("chat-stack--top", this.config.fromTop);
         this.chat.classList.toggle("chat-stack--right", alignRight);
+        this.trimOverflow();
     };
 
     ChatOverlayApp.prototype.isStreamerMessage = function (login) {
@@ -634,6 +638,19 @@
 
     ChatOverlayApp.prototype.trimOverflow = function () {
         while (this.chat.childElementCount > this.config.maxMessages) {
+            const oldest = this.chat.lastElementChild;
+            if (!oldest) {
+                break;
+            }
+            this.removeMessageById(oldest.dataset.messageId);
+        }
+
+        if (this.overlayType !== "streamer") {
+            return;
+        }
+
+        const availableHeight = Math.max(1, Math.floor(window.innerHeight / this.config.scale));
+        while (this.chat.childElementCount > 1 && this.chat.scrollHeight > availableHeight) {
             const oldest = this.chat.lastElementChild;
             if (!oldest) {
                 break;

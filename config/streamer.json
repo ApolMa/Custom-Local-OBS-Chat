@@ -1,8 +1,8 @@
 {
-  "maxMessages": 3,
-  "transparency": 0.7,
-  "scale": 4,
-  "disappearTimeMs": 120000,
+  "maxMessages": 5,
+  "transparency": 0.8,
+  "scale": 5,
+  "disappearTimeMs": 60000,
   "fromTop": true,
   "alignRight": true,
   "fadeOldMessages": false,
