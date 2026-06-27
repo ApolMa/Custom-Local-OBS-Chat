@@ -36,8 +36,6 @@ Use these URLs in OBS:
 - Main chat: `http://127.0.0.1:8080/chat.html`
 - Streamer messages: `http://127.0.0.1:8080/streamer.html`
 
-Set the browser source background to transparent.
-
 ## Config Files
 
 ### `config/shared.json`
