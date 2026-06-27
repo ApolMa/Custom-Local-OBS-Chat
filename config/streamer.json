@@ -3,5 +3,6 @@
   "transparency": 0.8,
   "scale": 5,
   "disappearTimeMs": 60000,
-  "fromTop": true
+  "fromTop": true,
+  "alignRight": true
 }

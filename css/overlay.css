@@ -27,6 +27,18 @@ body {
     transform-origin: left top;
 }
 
+.overlay-root--right {
+    left: auto;
+    right: 0;
+    padding-right: 0;
+    padding-left: 10px;
+    transform-origin: right bottom;
+}
+
+.overlay-root--top.overlay-root--right {
+    transform-origin: right top;
+}
+
 .chat-stack {
     display: flex;
     flex-direction: column-reverse;
@@ -37,12 +49,21 @@ body {
     flex-direction: column;
 }
 
+.chat-stack--right {
+    align-items: flex-end;
+}
+
 .chat_line {
     margin-bottom: 5px;
     padding-left: 8px;
     font-size: 22px;
     line-height: 1.5;
     animation: appear 1s ease-in-out;
+}
+
+.chat-stack--right .chat_line {
+    padding-left: 0;
+    padding-right: 8px;
 }
 
 .username-container {

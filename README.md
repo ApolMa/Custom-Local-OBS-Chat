@@ -46,6 +46,7 @@ Set the browser source background to transparent.
 - `disappearTimeMs`: auto-remove delay in milliseconds
   - `0` means messages stay until trimmed or moderated away
 - `fromTop`: `true` makes the overlay start at the top and grow downward; `false` keeps it anchored at the bottom
+- `alignRight`: streamer overlay only; `true` anchors message bubbles to the right side instead of the left
 
 The two overlay config files are separate on purpose, so your streamer-only source can use different limits or timing than the main chat source.
 
@@ -85,7 +86,8 @@ Set `disappearTimeMs` in the overlay config you want to change:
   "transparency": 1,
   "scale": 1,
   "disappearTimeMs": 12000,
-  "fromTop": false
+  "fromTop": false,
+  "alignRight": false
 }
 ```
 

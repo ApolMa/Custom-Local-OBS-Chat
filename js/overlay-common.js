@@ -6,7 +6,8 @@
         transparency: 1,
         scale: 1,
         disappearTimeMs: 0,
-        fromTop: false
+        fromTop: false,
+        alignRight: false
     };
     const DEFAULT_ACCENT = "#ff8cc8";
     const TWITCH_WS_URL = "wss://irc-ws.chat.twitch.tv:443";
@@ -29,7 +30,8 @@
             transparency: clampNumber(config.transparency, 0, 1, DEFAULT_OVERLAY_CONFIG.transparency),
             scale: clampNumber(config.scale, 0.25, 4, DEFAULT_OVERLAY_CONFIG.scale),
             disappearTimeMs: Math.max(0, Math.floor(clampNumber(config.disappearTimeMs, 0, 86400000, DEFAULT_OVERLAY_CONFIG.disappearTimeMs))),
-            fromTop: Boolean(config.fromTop)
+            fromTop: Boolean(config.fromTop),
+            alignRight: Boolean(config.alignRight)
         };
     }
 
@@ -331,10 +333,14 @@
     }
 
     ChatOverlayApp.prototype.applyOverlayConfig = function () {
+        const alignRight = this.overlayType === "streamer" && this.config.alignRight;
+
         this.root.style.setProperty("--overlay-scale", String(this.config.scale));
         this.root.style.opacity = String(this.config.transparency);
         this.root.classList.toggle("overlay-root--top", this.config.fromTop);
+        this.root.classList.toggle("overlay-root--right", alignRight);
         this.chat.classList.toggle("chat-stack--top", this.config.fromTop);
+        this.chat.classList.toggle("chat-stack--right", alignRight);
     };
 
     ChatOverlayApp.prototype.isStreamerMessage = function (login) {
