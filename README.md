@@ -5,6 +5,11 @@ It is served locally and used as one or more OBS browser sources.
 
 [ technical part and most of README were vibe coded, css visuals were coded by me ]
 
+### Some example screenshots
+
+<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/image.png" width="40%" height="40%">
+<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="40%" height="40%">
+
 ## Files You Actually Use
 
 - `chat.html`: main chat overlay
@@ -124,8 +129,3 @@ That example removes messages after 12 seconds.
 - Refresh the browser source after updating the files
 - Make sure the overlay is using the new `chat.html` or `streamer.html`
 - Twitch moderation removal only applies to messages currently visible in the overlay
-
-### Some example screenshots
-
-<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/image.png" width="40%" height="40%">
-<img src="https://github.com/ApolMa/Custom-Local-OBS-Chat/blob/2838f187147c6afff6e341bc9600b5cabfe669bb/asfasf.png" width="40%" height="40%">
